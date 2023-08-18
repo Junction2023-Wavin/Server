@@ -84,7 +84,14 @@ jobs:
           key: ${{ secrets.PRIVATE_KEY }}
           envs: GITHUB_SHA
           script: |
+            # 이미 hackathon 컨테이너가 실행 중이면 중지하고 제거
+            if docker ps -a | grep 'hackathon'; then
+              docker stop hackathon
+              docker rm hackathon
+            fi
+      
+            # 이미지를 가져옴
             docker pull ${{ secrets.DOCKER_USERNAME }}/hackathon:${GITHUB_SHA::7}
-            docker stop hackathon || true
-            docker rm hackathon || true
+      
+            # 컨테이너를 실행
             docker run -d --name hackathon -p 80:8080 ${{ secrets.DOCKER_USERNAME }}/hackathon:${GITHUB_SHA::7}
