@@ -37,8 +37,9 @@ jobs:
               ${{ runner.os }}-gradle-
 
     # 설정 파일 생성
+    - uses: actions/checkout@v2
     - run: |
-	  mkdir ./src/main/resources
+          mkdir ./src/main/resources
           cd ./src/main/resources
           touch ./application.yml 
           echo "${{env.APPLICATION}}" > ./application.yml
