@@ -48,7 +48,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) //Spring Security에서 세션을 사용하지 않도록 설정
                 .and()
                 .authorizeRequests()
-                .antMatchers("/auth/**", "/docs/**").permitAll()
+                .antMatchers("/auth/**", "/program/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .apply(new JwtSecurityConfig(tokenUtil, memberQueryService));
