@@ -13,7 +13,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.io.InvalidClassException;
 import java.util.List;
 import java.util.Map;
 
@@ -28,7 +27,7 @@ public class ProgramUserCase {
     @Value("${solum.pw}")
     private String pw;
 
-    public void startProgram() {
+    public void startProgram(Integer index) {
         String accessToken = getToken();
         if (accessToken == null) {
             throw new RuntimeException("Failed to get access token");
@@ -37,7 +36,7 @@ public class ProgramUserCase {
         List<String> labelCodes = List.of("085C1A6BE1D5", "085C1A72E1DD", "085C1A75E1DA", "085C1B43E1DE", "085C1B49E1D4");
 
         Flux.fromIterable(labelCodes)
-                .flatMap(labelCode -> updateLabel(accessToken, labelCode))
+                .flatMap(labelCode -> updateLabel(accessToken, labelCode, index))
                 .doOnNext(response -> {
                 })
                 .subscribe();
@@ -59,12 +58,12 @@ public class ProgramUserCase {
     }
 
 
-    private Mono<String> updateLabel(String accessToken, String labelCode) {
+    private Mono<String> updateLabel(String accessToken, String labelCode, Integer index) {
         return webClient.post()
                 .uri("/common/api/v2/common/labels/page?company=JC06&store=1111")
                 .header("Authorization", "Bearer " + accessToken)
                 .header("Content-Type", "application/json")
-                .body(BodyInserters.fromValue(Map.of("pageChangeList", List.of(Map.of("labelCode", labelCode, "page", 2)))))
+                .body(BodyInserters.fromValue(Map.of("pageChangeList", List.of(Map.of("labelCode", labelCode, "page", index)))))
                 .retrieve()
                 .bodyToMono(String.class);
     }

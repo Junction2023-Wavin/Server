@@ -4,9 +4,7 @@ import com.junction.hackathon.domain.program.application.ProgramUserCase;
 import com.junction.hackathon.global.config.response.SuccessResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import static com.junction.hackathon.domain.program.presentation.constant.AuthResponseMessage.PROGRAM_START_SUCCESS;
 
@@ -16,9 +14,9 @@ import static com.junction.hackathon.domain.program.presentation.constant.AuthRe
 public class ProgramController {
     private final ProgramUserCase programUserCase;
 
-    @PostMapping("/start")
-    public ResponseEntity<SuccessResponse> startProgram() {
-        this.programUserCase.startProgram();
+    @PostMapping("/start/{index}")
+    public ResponseEntity<SuccessResponse> startProgram(@PathVariable Integer index) {
+        this.programUserCase.startProgram(index);
         return ResponseEntity.ok(SuccessResponse.create(PROGRAM_START_SUCCESS.getMessage()));
     }
 
